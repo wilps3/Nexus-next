@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../components/AuthProvider";
 
 export default function LoginClient() {
   const { login } = useAuth();
@@ -15,21 +15,22 @@ export default function LoginClient() {
 
   const from = searchParams.get("from") || "/library";
 
-  const onSubmit = async (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
     setError("");
 
-    try {
-      await login({ email, password });
+    if (email === "demo@nexus.com" && password === "123456") {
+      login();
       router.push(from);
-    } catch (err) {
-      setError("Error en login");
+    } else {
+      setError("Credenciales incorrectas");
     }
   };
 
   return (
     <>
       <h2>Login</h2>
+
       <p className="muted">
         Debes iniciar sesión para acceder a Librería y Co-working.
       </p>
@@ -49,7 +50,7 @@ export default function LoginClient() {
           />
         </label>
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && <p style={{ color: "#dc2626", margin: 0 }}>{error}</p>}
 
         <button type="submit">Entrar</button>
       </form>
